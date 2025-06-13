@@ -1,0 +1,31 @@
+@import url('user.css');
+
+.subheader {
+    background-color: white;
+    border-bottom: 1px solid #ccc;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 80px;
+}
+
+.breadcome-menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    text-align: right;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.examcontainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 480px;
+    background-color: white;
+    margin: 10px auto;
+    width: 100%;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
