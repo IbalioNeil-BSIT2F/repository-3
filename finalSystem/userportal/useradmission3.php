@@ -3,40 +3,48 @@ include('../php/connection.php');
 session_start();
 date_default_timezone_set('Asia/Manila');
 
-//--- Redirect if not logged in
 if (!isset($_SESSION['user'])) {
     header("Location: ../login.php");
     exit();
 }
+
 $email = $_SESSION['user'];
 $msg = '';
 
-//--- Check current stage
-$stageQuery = $conn->query("SELECT current_stage, control_number FROM check_status WHERE username='$email'");
-$stageData = $stageQuery->fetch_assoc();
-$current_stage = (int) ($stageData['current_stage'] ?? 1);
-$control_number = $stageData['control_number'] ?? 'N/A';
+// Fetch user status
+$stmt = $conn->prepare("SELECT * FROM check_status WHERE username = ?");
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$result = $stmt->get_result();
 
-//--- If user already passed this stage, redirect to next
+if ($result->num_rows === 0) {
+    header("Location: useradmission.php");
+    exit();
+}
+
+$status = $result->fetch_assoc();
+$current_stage = (int) ($status['current_stage'] ?? 1);
+$control_number = $status['control_number'] ?? 'N/A';
+
+// Redirect to next stage if already completed
 if ($current_stage >= 4) {
     header("Location: useradmission4.php");
     exit();
 }
 
-//--- Get program from admission_info
+// Get program from admission_info
 $prog = $conn->query("SELECT program FROM admission_info WHERE username='$email'")->fetch_assoc();
 $program = $prog['program'] ?? '';
 
-//--- Load schedules
+// Load available schedules
 $schedules = $conn->query("SELECT schedule, meeting_link FROM uploaded_exams WHERE category='$program'")
                   ->fetch_all(MYSQLI_ASSOC);
 
-//--- Handle schedule confirmation
+// Handle schedule confirmation
 if (isset($_POST['confirm_schedule'])) {
     $sel = $_POST['selected_schedule'];
     $meet = $_POST['selected_link'];
 
-    // Check if already confirmed
     $exists = $conn->query("SELECT id FROM user_chosen_schedule WHERE email='$email'")->num_rows;
     if (!$exists) {
         $stmt1 = $conn->prepare("INSERT INTO user_chosen_schedule(email, chosen_schedule) VALUES (?, ?)");
@@ -53,31 +61,56 @@ if (isset($_POST['confirm_schedule'])) {
     }
 }
 
-//--- Get confirmed schedule and meeting link
+// Get confirmed schedule and meeting link
 $chosen = $conn->query("SELECT * FROM user_chosen_schedule WHERE email='$email'")->fetch_assoc();
 $confirmed_schedule = $chosen['chosen_schedule'] ?? '';
-$meeting_data = $conn->query("SELECT meeting_link FROM uploaded_exams WHERE category='$program' AND schedule='$confirmed_schedule'")
-                     ->fetch_assoc();
+$meeting_data = $conn->query("SELECT meeting_link FROM uploaded_exams WHERE category='$program' AND schedule='$confirmed_schedule'")->fetch_assoc();
 $meeting_link_final = $meeting_data['meeting_link'] ?? '';
 
 $now = time();
 $exam_time = strtotime($confirmed_schedule);
 $is_ready = $exam_time && $now >= $exam_time;
 
-//--- Update button_activate when time has passed
 if ($is_ready && isset($chosen) && !$chosen['button_activate']) {
     $conn->query("UPDATE user_chosen_schedule SET button_activate=1 WHERE email='$email'");
 }
 
-//--- Handle Start Now button
+// Handle Start Now button
 if (isset($_POST['start_exam']) && $is_ready) {
     $_SESSION['exam_started'] = true;
-
-    // ✅ Set current_stage to 4
     $conn->query("UPDATE check_status SET current_stage = 4 WHERE username = '$email'");
-
     header("Location: userexam.php");
     exit();
+}
+
+function renderStepProgress($status) {
+    $step1Complete = (
+        $status['admission_info_completed'] &&
+        $status['personal_info_completed'] &&
+        $status['family_bg_completed'] &&
+        $status['education_bg_completed'] &&
+        $status['med_his_info_completed']
+    );
+    $step2Complete = ($status['control_number_click'] == 1 && !empty($status['control_number']));
+    $step3Complete = ($status['current_stage'] >= 3);
+    $step4Complete = ($status['current_stage'] >= 4);
+
+    $steps = [
+        ['label' => 'Applicant Information', 'complete' => $step1Complete],
+        ['label' => 'Requirements', 'complete' => $step2Complete],
+        ['label' => 'Entrance Exam', 'complete' => $step3Complete],
+        ['label' => 'Exam Results', 'complete' => $step4Complete],
+    ];
+
+    echo '<section class="hero"><div class="center-wrapper"><div class="dashboard-container">';
+    foreach ($steps as $i => $step) {
+        $circleClass = $step['complete'] ? 'circle completed' : 'circle';
+        echo '<div class="circle-box">';
+        echo '<div class="' . $circleClass . '">' . ($i + 1) . '</div>';
+        echo '<div class="circle-label">' . htmlspecialchars($step['label']) . '</div>';
+        echo '</div>';
+    }
+    echo '</div></div></section>';
 }
 ?>
 
@@ -87,7 +120,93 @@ if (isset($_POST['start_exam']) && $is_ready) {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>User Admission 3</title>
-  <link rel="stylesheet" href="../css/user.css">
+  <link rel="stylesheet" href="../css/useradmission.css">
+  <style>
+    .upload-group input[type="file"] {
+      border: 2px solid #aaa;
+      border-radius: 5px;
+      padding: 6px;
+      background-color: #f9f9f9;
+      width: 100%;
+    }
+
+    .button2:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    .message {
+      padding: 10px;
+      background-color: #f0f8ff;
+      border: 1px solid #3399ff;
+      color: #003366;
+      border-radius: 5px;
+      margin-bottom: 15px;
+    }
+
+    .control-card {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.control-card .label {
+  font-size: 25px;
+  color: #444;
+  margin-bottom: 8px;
+}
+
+.control-card .control-number {
+  font-size: 30px;
+  font-weight: bold;
+  color: #007bff;
+  letter-spacing: 1px;
+}
+
+.requirement-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.requirement-card {
+  background-color: #ffffff;
+  padding: 15px 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.requirement-label {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.requirement-card input[type="file"] {
+  border: 1px solid #ccc;
+  padding: 8px;
+  border-radius: 6px;
+  background-color: #f8f9fa;
+  transition: all 0.3s ease;
+}
+
+.requirement-card input[type="file"]:hover {
+  background-color: #e9ecef;
+  cursor: pointer;
+}
+
+#submitBtn {
+  margin-top: 30px;
+  padding: 10px 20px;
+}
+
+</style>
 </head>
 <body>
 
@@ -122,6 +241,8 @@ if (isset($_POST['start_exam']) && $is_ready) {
   </div>
 
   <div class="content">
+      <?php renderStepProgress($status); ?>
+<div class="dashboard-cards">
     <div class="card">
       <h3>Your Control Number</h3>
       <div class="control-number"><?php echo htmlspecialchars($control_number); ?></div>

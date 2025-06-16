@@ -130,22 +130,22 @@ if (isset($_POST['submit'])) {
                     <div class="form-group">
                     <div class="form-control">
                         <label for="firstname">FIRSTNAME</label>
-                        <input type="text" id="firstname" name="firstname" value="<?php echo $firstname; ?>" placeholder="Input Text Field">
+                        <input type="text" id="firstname" name="firstname" value="<?php echo $firstname; ?>" placeholder="Input Text Field" required>
                     </div>
                     <div class="form-control">
                         <label for="middlename">MIDDLENAME</label>
-                        <input type="text" id="middlename" name="middlename" value="<?php echo $middlename; ?>" placeholder="Input Text Field">
+                        <input type="text" id="middlename" name="middlename" value="<?php echo $middlename; ?>" placeholder="Input Text Field" required>
                     </div>
                     <div class="form-control">
                         <label for="lastname">LASTNAME</label>
-                        <input type="text" id="lastname" name="lastname" value="<?php echo $lastname; ?>" placeholder="Input Text Field">
+                        <input type="text" id="lastname" name="lastname" value="<?php echo $lastname; ?>" placeholder="Input Text Field" required>
                     </div>
                     </div>
 
                     <div class="form-group">
                     <div class="form-control">
                         <label for="region">REGION</label>
-                        <select id="region" name="region">
+                        <select id="region" name="region" required>
                         <option value="">Select Item</option>
                         <option value="NCR" <?php if($region == "NCR") echo "selected"; ?>>National Capital Region (NCR)</option>
                         <option value="Region IV-A" <?php if($region == "Region IV-A") echo "selected"; ?>>CALABARZON (Region IV-A)</option>
@@ -157,7 +157,7 @@ if (isset($_POST['submit'])) {
 
                     <div class="form-control">
                         <label for="province">PROVINCE</label>
-                        <select id="province" name="province">
+                        <select id="province" name="province" required>
                         <option value="">Select Item</option>
                         <option value="Metro Manila" <?php if($province == "Metro Manila") echo "selected"; ?>>Metro Manila</option>
                         <option value="Cavite" <?php if($province == "Cavite") echo "selected"; ?>>Cavite</option>
@@ -170,7 +170,7 @@ if (isset($_POST['submit'])) {
 
                     <div class="form-control">
                         <label for="town">TOWN</label>
-                        <select id="town" name="town">
+                        <select id="town" name="town" required>
                         <option value="">Select Item</option>
                         <option value="Quezon City" <?php if($town == "Quezon City") echo "selected"; ?>>Quezon City</option>
                         <option value="Dasmariñas" <?php if($town == "Dasmariñas") echo "selected"; ?>>Dasmariñas</option>
@@ -185,11 +185,11 @@ if (isset($_POST['submit'])) {
                     <div class="form-group">
                     <div class="form-control">
                         <label for="phone">PHONENUMBER</label>
-                        <input type="text" id="phone" name="phone" value="<?php echo $phonenumber; ?>" placeholder="Input Text Field">
+                        <input type="text" id="phone" name="phone" value="<?php echo $phonenumber; ?>" placeholder="Input Text Field" required>
                     </div>
                     <div class="form-control">
                         <label for="civilstatus">Civil Status</label>
-                        <select id="civilstatus" name="civilstatus">
+                        <select id="civilstatus" name="civilstatus" required>
                         <option value="">Select Item</option>
                         <option value="Single" <?php if($civilstatus == "Single") echo "selected"; ?>>Single</option>
                         <option value="Married" <?php if($civilstatus == "Married") echo "selected"; ?>>Married</option>
@@ -197,7 +197,7 @@ if (isset($_POST['submit'])) {
                     </div>
                     <div class="form-control">
                         <label for="sex">SEX</label>
-                        <select id="sex" name="sex">
+                        <select id="sex" name="sex" required>
                         <option value="">Select Item</option>
                         <option value="Male" <?php if($sex == "Male") echo "selected"; ?>>Male</option>
                         <option value="Female" <?php if($sex == "Female") echo "selected"; ?>>Female</option>
@@ -208,15 +208,15 @@ if (isset($_POST['submit'])) {
                     <div class="form-group">
                     <div class="form-control">
                         <label for="birthday">BIRTHDAY</label>
-                        <input type="date" id="birthday" name="birthday" value="<?php echo $birthday; ?>">
+                        <input type="date" id="birthday" name="birthday" value="<?php echo $birthday; ?>" required>
                     </div>
                     <div class="form-control">
                         <label for="birthplace">BIRTHPLACE</label>
-                        <input type="text" id="birthplace" name="birthplace" value="<?php echo $birthplace; ?>" placeholder="Input Text Field">
+                        <input type="text" id="birthplace" name="birthplace" value="<?php echo $birthplace; ?>" placeholder="Input Text Field" required>
                     </div>
                     <div class="form-control">
                         <label for="religion">RELIGION</label>
-                        <input type="text" id="religion" name="religion" value="<?php echo $religion; ?>" placeholder="Input Text Field">
+                        <input type="text" id="religion" name="religion" value="<?php echo $religion; ?>" placeholder="Input Text Field" required>
                     </div>
                     </div>
 

@@ -58,7 +58,7 @@ function fetchUsersByStatus($conn, $status) {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Grading Management</title>
-  <link rel="stylesheet" href="..\css\admin.css">
+  <link rel="stylesheet" href="..\css\adminEC.css">
   <style>
     table { width: 100%; border-collapse: collapse; margin-bottom: 2rem; }
     th, td { padding: 10px; border: 1px solid #ccc; text-align: left; }
@@ -94,12 +94,12 @@ function fetchUsersByStatus($conn, $status) {
     </div>
   </div>
   <div class="subheader">
-    <div>Grading Management</div>
+    <h2>Grading Management</h2>
   </div>
 
   <div class="content">
-    <div class="maincontainer">
-
+    <div class="exam-container">
+    <div class="exam-table">
         <h2>Pending Users</h2>
         <table>
         <tr><th>Username</th><th>Full Name</th><th>Entry</th><th>Program</th><th>Action</th></tr>
@@ -113,7 +113,8 @@ function fetchUsersByStatus($conn, $status) {
         </tr>
         <?php endwhile; ?>
         </table>
-
+    </div>
+    <div class="exam-table">
         <h2>Passed Users</h2>
         <table>
         <tr><th>Username</th><th>Full Name</th><th>Entry</th><th>Program</th></tr>
@@ -126,7 +127,8 @@ function fetchUsersByStatus($conn, $status) {
         </tr>
         <?php endwhile; ?>
         </table>
-
+    </div>
+    <div class="exam-table">
         <h2>Failed Users</h2>
         <table>
         <tr><th>Username</th><th>Full Name</th><th>Entry</th><th>Program</th></tr>
@@ -139,7 +141,7 @@ function fetchUsersByStatus($conn, $status) {
         </tr>
         <?php endwhile; ?>
         </table>
-
+    </div>
 
     </div>
   </div>

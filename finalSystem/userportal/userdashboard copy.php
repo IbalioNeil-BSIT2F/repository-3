@@ -14,45 +14,91 @@
     $stmt->execute();
     $result = $stmt->get_result();
     $status = $result->fetch_assoc();
-
-    // Fetch exam schedule (if confirmed)
-$sched_stmt = $conn->prepare("SELECT chosen_schedule FROM user_chosen_schedule WHERE email = ?");
-$sched_stmt->bind_param("s", $email);
-$sched_stmt->execute();
-$sched_result = $sched_stmt->get_result();
-$chosen_schedule = $sched_result->fetch_assoc()['chosen_schedule'] ?? 'Empty';
-
-// Control number
-$control_number = $status['control_number'] ?? 'Finish the Application';
-
-// Application status: 0 = pending, 1 = accepted, 2 = rejected
-$app_stmt = $conn->prepare("SELECT status FROM application_status WHERE username = ?");
-$app_stmt->bind_param("s", $email);
-$app_stmt->execute();
-$app_result = $app_stmt->get_result();
-$app_row = $app_result->fetch_assoc();
-$status_code = $app_row['status'] ?? null;
-
-if ($status_code === null) {
-    $application_status = 'Not Available';
-} else {
-    $application_status = match ((int)$status_code) {
-        0 => 'Pending',
-        1 => 'Accepted',
-        2 => 'Rejected',
-        default => 'Unknown',
-    };
-}
-
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Web Layout</title>
+  <title>User Dashboard</title>
   <link rel="stylesheet" href="..\css\useradmission.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8f9fa;
+      margin: 0;
+      padding: 0;
+    }
+
+    
+
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 40px;
+    }
+
+    .dashboard-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 30px;
+    }
+
+    .circle-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.2s;
+    }
+
+    .circle-box:hover {
+      transform: scale(1.05);
+    }
+
+    .circle {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background-color: #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: bold;
+      color: white;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s;
+    }
+
+    .completed {
+      background-color: #007bff; /* Modern blue */
+    }
+
+    .circle-label {
+      margin-top: 12px;
+      font-size: 14px;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .topbar .right p {
+      font-weight: 500;
+    }
+
+    .backbtn {
+      background: none;
+      border: none;
+      color: #007bff;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .backbtn:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
 
@@ -72,36 +118,22 @@ if ($status_code === null) {
     </div>
   </div>
 
-  <!-- Main area -->
+  <!-- Main -->
   <div class="main">
-    <!-- Topbar -->
     <div class="topbar">
       <div class="left">
         <button class="backbtn">← Back</button>
       </div>
-      <div class="center">
-        <!-- Empty space -->
-      </div>
+      <div class="center"></div>
       <div class="right">
-        <p>Welcome, <span><?php echo $_SESSION['user']; ?></span></p>
+        <p>Welcome, <span><?php echo htmlspecialchars($_SESSION['user']); ?></span></p>
         <a href="..\php\logout.php"><button class="btn font-weight-bold">Logout</button></a>
       </div>
     </div>
 
-    
-
-    <!-- Main content container -->
+    <div class="container-box">
     <div class="content">
-      <div class="hero-text">
-  <div class="card3">
-    <h3>Welcome to Qupal University</h3>
-    <p> You are formally submitting your application for admission to the university, signifying your intent to pursue academic advancement and personal development within our esteemed institution, where excellence, integrity, and innovation are the cornerstones of your educational journey.</p>
-  </div>
-</div>
-      <!-- hero section -->
-      <section class="hero">
-        <div class="hero-text">
-          <h2>Application Progress</h2>
+      <h2>Application Progress</h2>
       <div class="dashboard-container">
         <div class="circle-box">
           <div class="circle <?php echo $status['admission_info_completed'] ? 'completed' : ''; ?>">✓</div>
@@ -125,37 +157,23 @@ if ($status_code === null) {
         </div>
         
       </div>
-        </div>
-      </section>
-
-
-
-      <!-- Dashboard Cards -->
-      <div class="dashboard-cards">
-  <div class="card">
-    <h3>Exam Schedule</h3>
-    <p><?php echo htmlspecialchars($chosen_schedule); ?></p>
+    </div>
   </div>
+    <div class="content">
   <div class="card">
-    <h3>Control Number</h3>
-    <p><?php echo htmlspecialchars($control_number ?: 'Finish the Application'); ?></p>
+    <h2>Available courses</h2>
   </div>
+
   <div class="card">
-    <h3>Status</h3>
-    <p><?php echo htmlspecialchars($application_status); ?></p>
+    <h2>Available courses</h2>
   </div>
 </div>
 
-
-      <!-- Optional second hero section -->
-    </div>
+    
   </div>
+  </div>
+
+  
 
 </body>
 </html>
-  <!--
-databases tables:
-user_chosen_schedule(`id``email``chosen_schedule``selected_at``button_activate`)
-check_status(`username``admission_info_completed``personal_info_completed``family_bg_completed``education_bg_completed``med_his_info_completed``control_number_click``control_number``current_stage`)
-application_status(`username``status``grade_status`)
-  -->

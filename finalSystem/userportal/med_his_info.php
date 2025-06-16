@@ -106,7 +106,7 @@ function isChecked($conditions, $value) {
           <div class="form-group">
             <div class="form-control" style="flex: 1;">
               <label for="medications">MEDICATIONS THAT ARE BEING TAKEN:</label>
-              <input type="text" id="medications" name="medications" placeholder="List any medications" value="<?php echo htmlspecialchars($medications); ?>">
+              <input type="text" id="medications" name="medications" placeholder="List any medications or N/A" value="<?php echo htmlspecialchars($medications); ?>">
             </div>
           </div>
 
@@ -124,7 +124,7 @@ function isChecked($conditions, $value) {
           <div class="form-group">
             <div class="form-control" style="flex: 1;">
               <label for="allergies">OTHER OR MORE SPECIFIC (I.E. KINDS OF ALLERGIES):</label>
-              <input type="text" id="allergies" name="allergies" placeholder="e.g., Peanuts, Penicillin" value="<?php echo htmlspecialchars($allergies); ?>">
+              <input type="text" id="allergies" name="allergies" placeholder="e.g., Peanuts, Penicillin or N/A" value="<?php echo htmlspecialchars($allergies); ?>">
             </div>
           </div>
 

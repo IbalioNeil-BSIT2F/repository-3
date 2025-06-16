@@ -139,60 +139,60 @@ if (isset($_POST['submit'])) {
             <div class="form-group">
               <div class="form-control">
                 <label for="guardian_name">GUARDIAN'S NAME</label>
-                <input type="text" name="guardian_name" id="guardian_name" value="<?php echo $gurdianname; ?>" placeholder="Input Text Field">
+                <input type="text" name="guardian_name" id="guardian_name" value="<?php echo $gurdianname; ?>" placeholder="Input Text Field" required>
               </div>
               <div class="form-control">
                 <label for="guardian_contact">CONTACT NUMBER</label>
-                <input type="text" name="guardian_contact" id="guardian_contact" value="<?php echo $gnumber; ?>" placeholder="Input Text Field">
+                <input type="text" name="guardian_contact" id="guardian_contact" value="<?php echo $gnumber; ?>" placeholder="Input Text Field" required>
               </div>
               <div class="form-control">
                 <label for="guardian_occupation">OCCUPATION</label>
-                <input type="text" name="guardian_occupation" id="guardian_occupation" value="<?php echo $goccupation; ?>" placeholder="Input Text Field">
+                <input type="text" name="guardian_occupation" id="guardian_occupation" value="<?php echo $goccupation; ?>" placeholder="Input Text Field" required>
               </div>
             </div>
 
             <div class="form-group">
               <div class="form-control">
                 <label for="father_name">FATHER'S NAME</label>
-                <input type="text" name="father_name" id="father_name" value="<?php echo $fathername; ?>" placeholder="Input Text Field">
+                <input type="text" name="father_name" id="father_name" value="<?php echo $fathername; ?>" placeholder="Input Text Field" required>
               </div>
               <div class="form-control">
                 <label for="father_contact">CONTACT NUMBER</label>
-                <input type="text" name="father_contact" id="father_contact" value="<?php echo $fnumber; ?>" placeholder="Input Text Field">
+                <input type="text" name="father_contact" id="father_contact" value="<?php echo $fnumber; ?>" placeholder="Input Text Field" required>
               </div>
               <div class="form-control">
                 <label for="father_occupation">OCCUPATION</label>
-                <input type="text" name="father_occupation" id="father_occupation" value="<?php echo $foccupation; ?>" placeholder="Input Text Field">
+                <input type="text" name="father_occupation" id="father_occupation" value="<?php echo $foccupation; ?>" placeholder="Input Text Field" required>
               </div>
             </div>
 
             <div class="form-group">
               <div class="form-control">
                 <label for="mother_name">MOTHER'S NAME</label>
-                <input type="text" name="mother_name" id="mother_name" value="<?php echo $mothername; ?>" placeholder="Input Text Field">
+                <input type="text" name="mother_name" id="mother_name" value="<?php echo $mothername; ?>" placeholder="Input Text Field" required>
               </div>
               <div class="form-control">
                 <label for="mother_contact">CONTACT NUMBER</label>
-                <input type="text" name="mother_contact" id="mother_contact" value="<?php echo $mnumber; ?>" placeholder="Input Text Field">
+                <input type="text" name="mother_contact" id="mother_contact" value="<?php echo $mnumber; ?>" placeholder="Input Text Field" required>
               </div>
               <div class="form-control">
                 <label for="mother_occupation">OCCUPATION</label>
-                <input type="text" name="mother_occupation" id="mother_occupation" value="<?php echo $moccupation; ?>" placeholder="Input Text Field">
+                <input type="text" name="mother_occupation" id="mother_occupation" value="<?php echo $moccupation; ?>" placeholder="Input Text Field" required>
               </div>
             </div>
 
             <div class="form-group">
               <div class="form-control">
                 <label for="income">FAMILY MONTHLY INCOME</label>
-                <input type="text" name="income" id="income" value="<?php echo $fam_month_inc; ?>" placeholder="₱10000, ₱10000-₱15000, etc.">
+                <input type="text" name="income" id="income" value="<?php echo $fam_month_inc; ?>" placeholder="₱10000, ₱10000-₱15000, etc." required>
               </div>
               <div class="form-control">
                 <label for="siblings">NUMBER OF SIBLING</label>
-                <input type="text" name="siblings" id="siblings" value="<?php echo $numsibling; ?>" placeholder="Input Text Field">
+                <input type="text" name="siblings" id="siblings" value="<?php echo $numsibling; ?>" placeholder="Input Text Field" required>
               </div>
               <div class="form-control">
                 <label for="birth_order">BIRTH ORDER</label>
-                <input type="text" name="birth_order" id="birth_order" value="<?php echo $birthorder; ?>" placeholder="First, second, etc.">
+                <input type="text" name="birth_order" id="birth_order" value="<?php echo $birthorder; ?>" placeholder="First, second, etc." required>
               </div>
             </div>
 

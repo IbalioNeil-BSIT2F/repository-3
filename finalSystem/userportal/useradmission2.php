@@ -122,6 +122,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_files'])) {
     // ✅ Display pending message
     $pending_message = 'Your documents have been submitted and are now pending approval.';
 }
+function renderStepProgress($status) {
+    $step1Complete = (
+        $status['admission_info_completed'] &&
+        $status['personal_info_completed'] &&
+        $status['family_bg_completed'] &&
+        $status['education_bg_completed'] &&
+        $status['med_his_info_completed']
+    );
+    $step2Complete = ($status['control_number_click'] == 1 && !empty($status['control_number']));
+    $step3Complete = ($status['current_stage'] >= 3);
+    $step4Complete = ($status['current_stage'] >= 4);
+
+    $steps = [
+        ['label' => 'Applicant Information', 'complete' => $step1Complete],
+        ['label' => 'Requirements', 'complete' => $step2Complete],
+        ['label' => 'Entrance Exam', 'complete' => $step3Complete],
+        ['label' => 'Exam Results', 'complete' => $step4Complete],
+    ];
+
+    echo '<section class="hero"><div class="center-wrapper"><div class="dashboard-container">';
+    foreach ($steps as $i => $step) {
+        $circleClass = $step['complete'] ? 'circle completed' : 'circle';
+        echo '<div class="circle-box">';
+        echo '<div class="' . $circleClass . '">' . ($i + 1) . '</div>';
+        echo '<div class="circle-label">' . htmlspecialchars($step['label']) . '</div>';
+        echo '</div>';
+    }
+    echo '</div></div></section>';
+}
 ?>
 
 <!DOCTYPE html>
@@ -131,7 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_files'])) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admission Requirements</title>
   <link rel="stylesheet" href="../css/useradmission.css">
-  <style>
+ <style>
     .upload-group input[type="file"] {
       border: 2px solid #aaa;
       border-radius: 5px;
@@ -152,6 +181,70 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_files'])) {
       border-radius: 5px;
       margin-bottom: 15px;
     }
+
+    .control-card {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.control-card .label {
+  font-size: 25px;
+  color: #444;
+  margin-bottom: 8px;
+}
+
+.control-card .control-number {
+  font-size: 30px;
+  font-weight: bold;
+  color: #007bff;
+  letter-spacing: 1px;
+}
+
+.requirement-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.requirement-card {
+  background-color: #ffffff;
+  padding: 15px 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.requirement-label {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.requirement-card input[type="file"] {
+  border: 1px solid #ccc;
+  padding: 8px;
+  border-radius: 6px;
+  background-color: #f8f9fa;
+  transition: all 0.3s ease;
+}
+
+.requirement-card input[type="file"]:hover {
+  background-color: #e9ecef;
+  cursor: pointer;
+}
+
+#submitBtn {
+  margin-top: 30px;
+  padding: 10px 20px;
+}
+
   </style>
 </head>
 <body>
@@ -182,12 +275,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_files'])) {
     </div>
 
     <div class="content">
-      <section class="hero">
-        <div class="hero-text"></div>
-        <div class="hero-image">
-          <img src="10221634-58ca-41c8-9dc7-b5c3ce73cc59.png" alt="CvSU Students" />
-        </div>
-      </section>
+      <?php renderStepProgress($status); ?>
 
       <div class="dashboard-cards">
         <div class="card control-card">
@@ -201,60 +289,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_files'])) {
           <?php endif; ?>
 
           <form method="post" enctype="multipart/form-data" id="uploadForm">
-            <h3>Admission Requirements: <?php echo htmlspecialchars(ucfirst($entry) . ' / ' . ucfirst($type)); ?></h3>
+            <h3 style="text-align: center; margin-bottom: 25px;">
+  Admission Requirements for <span style="color: #007bff;">
+  <?php echo htmlspecialchars(ucfirst($entry) . ' / ' . ucfirst($type)); ?>
+  </span>
+</h3>
 
-            <?php if ($entry === 'New'): ?>
-              <label for="report_card">Report Card / ALS Certificate</label>
-              <div class="upload-group">
-                <input type="file" name="report_card" id="report_card" required />
-              </div>
-              <label for="gmc">Certificate of Good Moral Character</label>
-              <div class="upload-group">
-                <input type="file" name="gmc" id="gmc" required />
-              </div>
-              <label for="birth_cert">PSA Birth Certificate</label>
-              <div class="upload-group">
-                <input type="file" name="birth_cert" id="birth_cert" required />
-              </div>
+<div class="requirement-grid">
 
-            <?php elseif ($entry === 'Transferee'): ?>
-              <label for="tor">Transcript of Records / Certificate of Grades</label>
-              <div class="upload-group">
-                <input type="file" name="tor" id="tor" required />
-              </div>
-              <label for="dismissal">Transfer Credentials / Honorable Dismissal</label>
-              <div class="upload-group">
-                <input type="file" name="dismissal" id="dismissal" required />
-              </div>
-              <label for="gmc">Certificate of Good Moral Character</label>
-              <div class="upload-group">
-                <input type="file" name="gmc" id="gmc" required />
-              </div>
-              <label for="nbi">NBI Clearance</label>
-              <div class="upload-group">
-                <input type="file" name="nbi" id="nbi" required />
-              </div>
-              <label for="birth_cert">PSA Birth Certificate</label>
-              <div class="upload-group">
-                <input type="file" name="birth_cert" id="birth_cert" required />
-              </div>
+<?php
+function renderUploadField($label, $name) {
+  echo '
+    <div class="requirement-card">
+      <p class="requirement-label">' . htmlspecialchars($label) . '</p>
+      <input type="file" name="' . $name . '" id="' . $name . '" required>
+    </div>
+  ';
+}
 
-            <?php elseif ($entry === 'Second Courser'): ?>
-              <label for="tor">Transcript of Records</label>
-              <div class="upload-group">
-                <input type="file" name="tor" id="tor" required />
-              </div>
-              <label for="gmc">Certificate of Good Moral Character</label>
-              <div class="upload-group">
-                <input type="file" name="gmc" id="gmc" required />
-              </div>
-              <label for="birth_cert">PSA Birth Certificate</label>
-              <div class="upload-group">
-                <input type="file" name="birth_cert" id="birth_cert" required />
-              </div>
-            <?php endif; ?>
+if ($entry === 'New') {
+  renderUploadField('Report Card / ALS Certificate', 'report_card');
+  renderUploadField('Certificate of Good Moral Character', 'gmc');
+  renderUploadField('PSA Birth Certificate', 'birth_cert');
 
-            <button class="button2" type="submit" name="submit_files" id="submitBtn">Submit All Files</button>
+} elseif ($entry === 'Transferee') {
+  renderUploadField('Transcript of Records / Certificate of Grades', 'tor');
+  renderUploadField('Transfer Credentials / Honorable Dismissal', 'dismissal');
+  renderUploadField('Certificate of Good Moral Character', 'gmc');
+  renderUploadField('NBI Clearance', 'nbi');
+  renderUploadField('PSA Birth Certificate', 'birth_cert');
+
+} elseif ($entry === 'Second Courser') {
+  renderUploadField('Transcript of Records', 'tor');
+  renderUploadField('Certificate of Good Moral Character', 'gmc');
+  renderUploadField('PSA Birth Certificate', 'birth_cert');
+}
+?>
+</div>
+
+
+            <button class="button2" type="submit" name="submit_files" id="submitBtn" style="margin-top: 30px;">
+  Submit All Files
+</button>
           </form>
         </div>
       </div>

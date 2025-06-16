@@ -157,7 +157,7 @@ if (isset($_GET['duplicate_exam_id'])) {
   </div>
 
   <div class="subheader">
-    <div>Manage Exam</div>
+    <h2>Manage Exam</h2>
   </div>
 
   <div class="content">

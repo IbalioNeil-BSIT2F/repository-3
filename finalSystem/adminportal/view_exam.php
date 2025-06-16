@@ -79,7 +79,7 @@ if (isset($_GET['confirm']) && isset($_GET['result'])) {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>View Exam</title>
-  <link rel="stylesheet" href="..\css\admin.css">
+  <link rel="stylesheet" href="..\css\adminEC.css">
   <style>
     .question { margin-bottom: 1.5rem; padding: 1rem; border: 1px solid #ccc; border-radius: 10px; }
     .correct { color: green; font-weight: bold; }
@@ -124,8 +124,6 @@ if (isset($_GET['confirm']) && isset($_GET['result'])) {
   </div>
 
   <div class="content">
-    <div class="maincontainer">
-
       <div class="score-box">
         <p>Score: <strong><?php echo $score; ?></strong></p>
         <p>Result: <strong style="color:<?php echo $passed ? 'green' : 'red'; ?>"><?php echo $passed ? 'Passed' : 'Failed'; ?></strong></p>
@@ -166,8 +164,6 @@ if (isset($_GET['confirm']) && isset($_GET['result'])) {
           <button class="confirm-btn" style="background-color: #f44336; color: white;">✖ Fail</button>
         </a>
       </div>
-
-    </div>
   </div>
 </div>
 
