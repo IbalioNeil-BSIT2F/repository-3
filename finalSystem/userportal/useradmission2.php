@@ -153,13 +153,8 @@ function renderStepProgress($status) {
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admission Requirements</title>
-  <link rel="stylesheet" href="../css/useradmission.css">
+<?php include('../php/useradmissionheader.php'); ?>
+
  <style>
     .upload-group input[type="file"] {
       border: 2px solid #aaa;
@@ -246,33 +241,6 @@ function renderStepProgress($status) {
 }
 
   </style>
-</head>
-<body>
-  <div class="sidebar">
-    <div>
-      <div class="logo">LOGO</div>
-      <div class="nav-top">
-        <button class="nav-btn" onclick="window.location.href='userdashboard.php'">Dashboard</button>
-        <button class="nav-btn" onclick="window.location.href='useradmission2.php'">Admission Overview</button>
-        <button class="nav-btn" onclick="window.location.href='userprodandprog.php'">Procedures and Programs</button>
-      </div>
-    </div>
-    <div class="nav-bottom">
-      <button class="nav-btn">Settings</button>
-      <button class="nav-btn">Help</button>
-    </div>
-  </div>
-
-  <div class="main">
-    <div class="topbar">
-      <div class="left">
-        <button class="backbtn" disabled>← Back</button>
-      </div>
-      <div class="right">
-        <p>Welcome, <span><?php echo htmlspecialchars($user_data['firstname'] . ' ' . $user_data['lastname']); ?></span></p>
-        <a href="../php/logout.php"><button class="btn">Logout</button></a>
-      </div>
-    </div>
 
     <div class="content">
       <?php renderStepProgress($status); ?>

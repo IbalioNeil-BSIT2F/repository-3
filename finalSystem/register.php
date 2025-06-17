@@ -50,7 +50,7 @@
           <input type="email" name="email" placeholder="Enter your email" class="form-control" required>
         </div>
         <div class="form-group">
-          <select name="user_type" class="form-control">
+          <select name="user_type" class="form-control" style="display: none;">
             <option value="user">User</option>
             <option value="admin">Admin</option>
           </select>

@@ -44,15 +44,7 @@ function isChecked($conditions, $value) {
 }
 ?>
 
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Medical History</title>
-  <link rel="stylesheet" href="..\css\user_form.css">
-  <script>
+<script>
     // Uncheck all other checkboxes if "None" is selected
     function handleCheckboxClick(clicked) {
       if (clicked.value === "None" && clicked.checked) {
@@ -64,38 +56,9 @@ function isChecked($conditions, $value) {
       }
     }
   </script>
-</head>
-<body>
 
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <div>
-      <div class="logo">LOGO</div>
-      <div class="nav-top">
-        <button class="nav-btn" onclick="window.location.href='userdashboard.php'">Dashboard</button>
-        <button class="nav-btn" onclick="window.location.href='useradmission.php'">Admission Overview</button>
-        <button class="nav-btn" onclick="window.location.href='userprodandprog.php'">Procedures and Programs</button>
-      </div>
-    </div>
-    <div class="nav-bottom">
-      <button class="nav-btn">Settings</button>
-      <button class="nav-btn">Help</button>
-    </div>
-  </div>
+<?php include('../php/userformheader.php'); ?>
 
-  <!-- Main area -->
-  <div class="main">
-    <!-- Topbar -->
-    <div class="topbar">
-      <div class="left">
-        <button class="backbtn">← Back</button>
-      </div>
-      <div class="center"></div>
-      <div class="right">
-        <p>Welcome, <span><?php echo $user; ?></span></p>
-        <a href="..\php\logout.php"><button class="btn font-weight-bold">Logout</button></a>
-      </div>
-    </div>
 
     <!-- Main content container -->
     <div class="content">
