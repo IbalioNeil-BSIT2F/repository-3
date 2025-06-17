@@ -9,6 +9,30 @@ if (!isset($_SESSION['user'])) {
 
 $username = $_SESSION['user'];
 
+// ✅ Check application_status and redirect
+$stmt = $conn->prepare("SELECT status FROM application_status WHERE username = ?");
+$stmt->bind_param("s", $username);
+$stmt->execute();
+$app_result = $stmt->get_result();
+$app_status = $app_result->fetch_assoc();
+
+$is_pending = false;
+$read_only_attr = '';
+
+if ($app_status) {
+    $status_code = (int)$app_status['status'];
+    if ($status_code === 1) {
+        header("Location: useradmission3.php");
+        exit();
+    } elseif ($status_code === 3) {
+        header("Location: sorry_message.php");
+        exit();
+    } elseif ($status_code === 0) {
+        $is_pending = true;
+        $read_only_attr = 'disabled';
+    }
+}
+
 // Fetch user status
 $stmt = $conn->prepare("SELECT * FROM check_status WHERE username = ?");
 $stmt->bind_param("s", $username);
@@ -52,7 +76,6 @@ $type = $type_data['type'] ?? '';
 
 $pending_message = '';
 
-// Handle file submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_files'])) {
     $upload_dir = '../uploads/';
     $timestamp = date('Y-m-d H:i:s');
@@ -79,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_files'])) {
                                 VALUES (?, ?, ?, ?, ?, ?)
                                 ON DUPLICATE KEY UPDATE report_card=?, gmc=?, birth_cert=?, submitted_at=?");
         $stmt->bind_param("ssssssssss", $username, $control_number, $report_card, $gmc, $birth_cert, $timestamp,
-                                      $report_card, $gmc, $birth_cert, $timestamp);
+                                          $report_card, $gmc, $birth_cert, $timestamp);
         $stmt->execute();
     } elseif ($entry === 'Transferee') {
         $tor = save_file('tor', $username, $upload_dir);
@@ -92,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_files'])) {
                                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                                 ON DUPLICATE KEY UPDATE tor=?, dismissal=?, gmc=?, nbi=?, birth_cert=?, submitted_at=?");
         $stmt->bind_param("ssssssssssssss", $username, $control_number, $tor, $dismissal, $gmc, $nbi, $birth_cert, $timestamp,
-                                             $tor, $dismissal, $gmc, $nbi, $birth_cert, $timestamp);
+                                                 $tor, $dismissal, $gmc, $nbi, $birth_cert, $timestamp);
         $stmt->execute();
     } elseif ($entry === 'Second Courser') {
         $tor = save_file('tor', $username, $upload_dir);
@@ -103,14 +126,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_files'])) {
                                 VALUES (?, ?, ?, ?, ?, ?)
                                 ON DUPLICATE KEY UPDATE tor=?, gmc=?, birth_cert=?, submitted_at=?");
         $stmt->bind_param("ssssssssss", $username, $control_number, $tor, $gmc, $birth_cert, $timestamp,
-                                       $tor, $gmc, $birth_cert, $timestamp);
+                                           $tor, $gmc, $birth_cert, $timestamp);
         $stmt->execute();
     }
 
-    // ✅ Set stage 3
-    $stmt = $conn->prepare("UPDATE check_status SET current_stage = 3 WHERE username = ?");
-    $stmt->bind_param("s", $username);
-    $stmt->execute();
+    
 
     // ✅ Insert or update application_status to pending (0)
     $stmt = $conn->prepare("INSERT INTO application_status (username, status) 
@@ -119,10 +139,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_files'])) {
     $stmt->bind_param("s", $username);
     $stmt->execute();
 
-    // ✅ Display pending message
     $pending_message = 'Your documents have been submitted and are now pending approval.';
+
+    echo "<script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const btn = document.getElementById('submitBtn');
+        if (btn) {
+          btn.disabled = true;
+          btn.innerText = 'Submitted';
+        }
+      });
+    </script>";
 }
+
 function renderStepProgress($status) {
+    if (!$status) return;
+
     $step1Complete = (
         $status['admission_info_completed'] &&
         $status['personal_info_completed'] &&
@@ -296,9 +328,11 @@ if ($entry === 'New') {
 </div>
 
 
-            <button class="button2" type="submit" name="submit_files" id="submitBtn" style="margin-top: 30px;">
+            <button class="button2" type="submit" name="submit_files" id="submitBtn" style="margin-top: 30px;" >
   Submit All Files
 </button>
+
+
           </form>
         </div>
       </div>

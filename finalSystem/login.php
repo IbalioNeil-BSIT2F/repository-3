@@ -43,9 +43,11 @@
   <div class="hero">
     <!-- Left Column -->
     <div class="left">
-      <h2>Welcome!</h2>
-      <p>Register now to join our community. Stay connected and enjoy exclusive features.</p>
-    </div>
+  <img src="image/logo.png" alt="Qupal University Logo" class="login-logo">
+  <h2>Welcome!</h2>
+  <p>Login Now</p>
+</div>
+
 
     <!-- Right Column (Form) -->
     <div class="right">

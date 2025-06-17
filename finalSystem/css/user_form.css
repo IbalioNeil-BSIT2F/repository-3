@@ -319,3 +319,14 @@ button.confirm-btn {
     cursor: pointer;
     width: fit-content;
 }
+
+.logo {
+  text-align: center;
+  padding: 5px 0;
+}
+
+.logo-img {
+  width: 100px;
+  height: auto;
+  filter: brightness(0) invert(1);
+}

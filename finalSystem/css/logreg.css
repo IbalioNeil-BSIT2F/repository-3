@@ -37,6 +37,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
 }
 
 .hero .left h2 {
@@ -95,3 +96,9 @@ body {
     margin-bottom: 10px;
 }
 
+.login-logo {
+  width: 350px;
+  height: auto;
+  filter: brightness(0) invert(1); /* Turns black to white */
+  margin-bottom: 20px;
+}

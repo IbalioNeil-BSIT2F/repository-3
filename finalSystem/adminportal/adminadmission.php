@@ -34,7 +34,7 @@ $rejected_students = fetch_students_by_status($conn, 3);
 <body>
   <div class="sidebar">
     <div>
-      <div class="logo">LOGO</div>
+      <div class="logo">ADMIN PANEL</div>
       <div class="nav-top">
         <button class="nav-btn" onclick="window.location.href='admindashboard.php'">Dashboard</button>
         <button class="nav-btn" onclick="window.location.href='adminadmission.php'">Manage Admission</button>
@@ -42,10 +42,8 @@ $rejected_students = fetch_students_by_status($conn, 3);
         <button class="nav-btn" onclick="window.location.href='exam_category.php'">Manage Exam</button>
       </div>
     </div>
-    <div class="nav-bottom">
-      <button class="nav-btn">Settings</button>
-      <button class="nav-btn">Help</button>
-    </div>
+  </div>
+
   </div>
 
   <div class="main">

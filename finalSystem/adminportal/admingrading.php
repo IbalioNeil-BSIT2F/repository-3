@@ -70,7 +70,7 @@ function fetchUsersByStatus($conn, $status) {
 
 <div class="sidebar">
   <div>
-    <div class="logo">LOGO</div>
+    <div class="logo">ADMIN PANEL</div>
     <div class="nav-top">
         <button class="nav-btn" onclick="window.location.href='admindashboard.php'">Dashboard</button>
         <button class="nav-btn" onclick="window.location.href='adminadmission.php'">Manage Admission</button>
@@ -78,15 +78,13 @@ function fetchUsersByStatus($conn, $status) {
         <button class="nav-btn" onclick="window.location.href='exam_category.php'">Manage Exam</button>
     </div>
   </div>
-  <div class="nav-bottom">
-    <button class="nav-btn">Settings</button>
-    <button class="nav-btn">Help</button>
   </div>
+
 </div>
 
 <div class="main">
   <div class="topbar">
-    <div class="left"><button class="backbtn">← Back</button></div>
+    <button class="backbtn" onclick="history.back()">&larr; Back</button>
     <div class="center"></div>
     <div class="right">
       <p>Welcome, <span><?php echo $_SESSION['admin']; ?></span></p>
@@ -100,7 +98,7 @@ function fetchUsersByStatus($conn, $status) {
   <div class="content">
     <div class="exam-container">
     <div class="exam-table">
-        <h2>Pending Users</h2>
+        <h2>Pending Applicants</h2>
         <table>
         <tr><th>Username</th><th>Full Name</th><th>Entry</th><th>Program</th><th>Action</th></tr>
         <?php while($row = $pending_users->fetch_assoc()): ?>
@@ -115,7 +113,7 @@ function fetchUsersByStatus($conn, $status) {
         </table>
     </div>
     <div class="exam-table">
-        <h2>Passed Users</h2>
+        <h2>Passed Applicants</h2>
         <table>
         <tr><th>Username</th><th>Full Name</th><th>Entry</th><th>Program</th></tr>
         <?php while($row = $passed_users->fetch_assoc()): ?>
@@ -129,7 +127,7 @@ function fetchUsersByStatus($conn, $status) {
         </table>
     </div>
     <div class="exam-table">
-        <h2>Failed Users</h2>
+        <h2>Failed Applicants</h2>
         <table>
         <tr><th>Username</th><th>Full Name</th><th>Entry</th><th>Program</th></tr>
         <?php while($row = $failed_users->fetch_assoc()): ?>

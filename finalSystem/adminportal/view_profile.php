@@ -154,22 +154,18 @@ function formatLabel($key) {
 </head>
 <body>
   <div class="sidebar">
-    <div class="logo">LOGO</div>
+    <div class="logo">ADMIN PANEL</div>
     <div class="nav-top">
         <button class="nav-btn" onclick="window.location.href='admindashboard.php'">Dashboard</button>
         <button class="nav-btn" onclick="window.location.href='adminadmission.php'">Manage Admission</button>
         <button class="nav-btn" onclick="window.location.href='admingrading.php'">Manage Grade</button>
         <button class="nav-btn" onclick="window.location.href='exam_category.php'">Manage Exam</button>
     </div>
-    <div class="nav-bottom">
-      <button>Settings</button>
-      <button>Help</button>
-    </div>
   </div>
 
   <div class="main">
     <div class="topbar">
-      <div class="left"><a href="adminadmission.php">&larr; Back</a></div>
+      <button class="backbtn" onclick="history.back()">&larr; Back</button>
       <div class="right">
         <p>Welcome, <span><?php echo $_SESSION['admin']; ?></span></p>
         <a href="../php/logout.php"><button>Logout</button></a>

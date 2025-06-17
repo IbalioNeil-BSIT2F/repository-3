@@ -45,50 +45,7 @@ if ($status_code === null) {
 }
 
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Web Layout</title>
-  <link rel="stylesheet" href="..\css\useradmission.css">
-</head>
-<body>
-
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <div>
-      <div class="logo">LOGO</div>
-      <div class="nav-top">
-        <button class="nav-btn" onclick="window.location.href='userdashboard.php'">Dashboard</button>
-        <button class="nav-btn" onclick="window.location.href='useradmission.php'">Admission Overview</button>
-        <button class="nav-btn" onclick="window.location.href='userprodandprog.php'">Procedures and Programs</button>
-      </div>
-    </div>
-    <div class="nav-bottom">
-      <button class="nav-btn">Settings</button>
-      <button class="nav-btn">Help</button>
-    </div>
-  </div>
-
-  <!-- Main area -->
-  <div class="main">
-    <!-- Topbar -->
-    <div class="topbar">
-      <div class="left">
-        <button class="backbtn">← Back</button>
-      </div>
-      <div class="center">
-        <!-- Empty space -->
-      </div>
-      <div class="right">
-        <p>Welcome, <span><?php echo $_SESSION['user']; ?></span></p>
-        <a href="..\php\logout.php"><button class="btn font-weight-bold">Logout</button></a>
-      </div>
-    </div>
-
-    
+<?php include('../php/useradmissionheader.php'); ?>
 
     <!-- Main content container -->
     <div class="content">
@@ -145,17 +102,8 @@ if ($status_code === null) {
     <p><?php echo htmlspecialchars($application_status); ?></p>
   </div>
 </div>
-
-
-      <!-- Optional second hero section -->
     </div>
   </div>
 
 </body>
 </html>
-  <!--
-databases tables:
-user_chosen_schedule(`id``email``chosen_schedule``selected_at``button_activate`)
-check_status(`username``admission_info_completed``personal_info_completed``family_bg_completed``education_bg_completed``med_his_info_completed``control_number_click``control_number``current_stage`)
-application_status(`username``status``grade_status`)
-  -->

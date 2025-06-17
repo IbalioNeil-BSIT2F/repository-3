@@ -1,4 +1,4 @@
-<?php
+<?php 
 include('..\php\connection.php');
 session_start();
 
@@ -7,7 +7,7 @@ if (!isset($_GET['username'])) {
 }
 $username = $_GET['username'];
 
-// Fetch latest submitted attempt
+// Fetch latest submitted attempt for this user
 $attempt = $conn->prepare("SELECT * FROM exam_attempts WHERE email = ? AND is_submitted = 1 ORDER BY ended_at DESC LIMIT 1");
 $attempt->bind_param("s", $username);
 $attempt->execute();
@@ -15,18 +15,19 @@ $attempt_result = $attempt->get_result();
 if ($attempt_result->num_rows === 0) {
     die("No submitted exam found for this user.");
 }
-$exam_data = $attempt_result->fetch_assoc();
-$exam_id = $exam_data['exam_id'];
+$attempt_data = $attempt_result->fetch_assoc();
+$exam_id = $attempt_data['exam_id'];
+$attempt_id = $attempt_data['attempt_id'];
 
-// Fetch all questions for that exam
+// Fetch all questions for this exam
 $questions_stmt = $conn->prepare("SELECT * FROM questions WHERE exam_id = ?");
 $questions_stmt->bind_param("i", $exam_id);
 $questions_stmt->execute();
 $questions_result = $questions_stmt->get_result();
 
-// Fetch user answers
-$answers_stmt = $conn->prepare("SELECT question_no, answer FROM exam_answers WHERE email = ? AND exam_id = ?");
-$answers_stmt->bind_param("si", $username, $exam_id);
+// Fetch answers tied to the attempt
+$answers_stmt = $conn->prepare("SELECT question_no, answer FROM exam_answers WHERE attempt_id = ?");
+$answers_stmt->bind_param("i", $attempt_id);
 $answers_stmt->execute();
 $answers_result = $answers_stmt->get_result();
 $user_answers = [];
@@ -42,7 +43,7 @@ $questions = [];
 while ($row = $questions_result->fetch_assoc()) {
     $qno = $row['question_no'];
     $user_answer = $user_answers[$qno] ?? 'N/A';
-    $is_correct = ($user_answer === $row['answer']) ? true : false;
+    $is_correct = ($user_answer === $row['answer']);
     if ($is_correct) $correct_answers++;
     $total_questions++;
 
@@ -60,9 +61,9 @@ while ($row = $questions_result->fetch_assoc()) {
 }
 
 $score = "$correct_answers / $total_questions";
-$passed = $correct_answers >= ceil($total_questions * 0.5); // 50% passing threshold
+$passed = $correct_answers >= ceil($total_questions * 0.5); // 50% passing
 
-// Handle confirmation of grade
+// Confirm grade if requested
 if (isset($_GET['confirm']) && isset($_GET['result'])) {
     $grade_status = ($_GET['result'] === 'pass') ? 1 : 2;
     $update = $conn->prepare("UPDATE application_status SET grade_status = ? WHERE username = ?");
@@ -72,12 +73,10 @@ if (isset($_GET['confirm']) && isset($_GET['result'])) {
     exit();
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>View Exam</title>
   <link rel="stylesheet" href="..\css\adminEC.css">
   <style>
@@ -93,7 +92,7 @@ if (isset($_GET['confirm']) && isset($_GET['result'])) {
 
 <div class="sidebar">
   <div>
-    <div class="logo">LOGO</div>
+    <div class="logo">ADMIN PANEL</div>
     <div class="nav-top">
       <button class="nav-btn" onclick="window.location.href='admindashboard.php'">Dashboard</button>
       <button class="nav-btn" onclick="window.location.href='adminadmission.php'">Manage Admission</button>
@@ -101,20 +100,16 @@ if (isset($_GET['confirm']) && isset($_GET['result'])) {
       <button class="nav-btn" onclick="window.location.href='exam_category.php'">Manage Exam</button>
     </div>
   </div>
-  <div class="nav-bottom">
-    <button class="nav-btn">Settings</button>
-    <button class="nav-btn">Help</button>
-  </div>
 </div>
 
 <div class="main">
   <div class="topbar">
     <div class="left">
-      <button class="backbtn" onclick="window.location.href='admingrading.php'">← Back</button>
+      <button class="backbtn" onclick="history.back()">&larr; Back</button>
     </div>
     <div class="center"></div>
     <div class="right">
-      <p>Welcome, <span><?php echo $_SESSION['admin']; ?></span></p>
+      <p>Welcome, <span><?php echo htmlspecialchars($_SESSION['admin']); ?></span></p>
       <a href="..\php\logout.php"><button class="btn font-weight-bold">Logout</button></a>
     </div>
   </div>
@@ -135,7 +130,6 @@ if (isset($_GET['confirm']) && isset($_GET['result'])) {
           <ul class="answer-box">
             <?php for ($i = 1; $i <= 4; $i++): 
               $opt = $q["opt$i"];
-              $opt_letter = "opt$i";
               $is_user = $q['user_answer'] === $opt;
               $is_correct = $q['correct_answer'] === $opt;
               ?>

@@ -10,7 +10,9 @@
 
   <div class="sidebar">
     <div>
-      <div class="logo">LOGO</div>
+<div class="logo">
+  <img src="../image/logo.png" alt="Qupal University Logo" class="logo-img">
+</div>
       <div class="nav-top">
         <button class="nav-btn" onclick="window.location.href='userdashboard.php'">Dashboard</button>
         <button class="nav-btn" onclick="window.location.href='useradmission.php'">Admission Overview</button>
@@ -18,7 +20,7 @@
       </div>
     </div>
     <div class="nav-bottom">
-      <button class="nav-btn">About</button>
+      <button class="backbtn" onclick="history.back()">&larr; Back</button>
     </div>
   </div>
 

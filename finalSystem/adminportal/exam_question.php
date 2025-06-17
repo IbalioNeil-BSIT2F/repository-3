@@ -61,7 +61,7 @@ if (isset($_POST['addexambtn'])) {
   <!-- Sidebar -->
   <div class="sidebar">
     <div>
-      <div class="logo">LOGO</div>
+      <div class="logo">ADMIN PANEL</div>
       <div class="nav-top">
         <button class="nav-btn" onclick="window.location.href='admindashboard.php'">Dashboard</button>
         <button class="nav-btn" onclick="window.location.href='adminadmission.php'">Manage Admission</button>
@@ -69,10 +69,8 @@ if (isset($_POST['addexambtn'])) {
         <button class="nav-btn" onclick="window.location.href='exam_category.php'">Manage Exam</button>
       </div>
     </div>
-    <div class="nav-bottom">
-      <button class="nav-btn">Settings</button>
-      <button class="nav-btn">Help</button>
-    </div>
+  </div>
+
   </div>
 
   <!-- Main area -->
@@ -80,7 +78,7 @@ if (isset($_POST['addexambtn'])) {
     <!-- Topbar -->
     <div class="topbar">
       <div class="left">
-        <button class="backbtn" onclick="window.location.href='exam_category.php'">← Back</button>
+        <button class="backbtn" onclick="history.back()">&larr; Back</button>
       </div>
       <div class="center">
         <!-- Empty space -->
